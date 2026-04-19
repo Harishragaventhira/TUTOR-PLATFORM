@@ -1,0 +1,296 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@import "tailwindcss";
+
+* {
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #0056D2;
+  --primary-dark: #0042A8;
+  --primary-light: #E6F0FF;
+  --secondary: #E6F0FF;
+  --accent-green: #22C55E;
+  --accent-orange: #F59E0B;
+  --bg-white: #FFFFFF;
+  --bg-light: #F5F7FA;
+  --bg-section: #EEF2F8;
+  --text-dark: #1F2937;
+  --text-medium: #4B5563;
+  --text-light: #9CA3AF;
+  --border: #E5E7EB;
+  --border-blue: #BFDBFE;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+  --shadow-lg: 0 10px 30px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: #F5F7FA;
+  color: #1F2937;
+  min-height: 100vh;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===================== CUSTOM SCROLLBAR ===================== */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: #F1F5F9; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #0056D2; }
+
+/* ===================== TYPOGRAPHY ===================== */
+.text-primary { color: #0056D2; }
+.text-dark { color: #1F2937; }
+.text-medium { color: #4B5563; }
+.text-light-txt { color: #9CA3AF; }
+
+/* gradient-text is now solid blue for Coursera style */
+.gradient-text { color: #0056D2; }
+
+/* ===================== CARDS ===================== */
+.glass-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.card-hover {
+  transition: all 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: #BFDBFE !important;
+}
+
+/* ===================== BUTTONS ===================== */
+.btn-primary {
+  background: #0056D2;
+  color: #FFFFFF;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+.btn-primary:hover {
+  background: #0042A8;
+  box-shadow: 0 4px 12px rgba(0,86,210,0.25);
+  transform: translateY(-1px);
+}
+.btn-primary:active { transform: translateY(0); }
+
+.btn-secondary {
+  background: #FFFFFF;
+  color: #0056D2;
+  border: 1.5px solid #0056D2;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+.btn-secondary:hover {
+  background: #E6F0FF;
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #4B5563;
+  border: 1.5px solid #E5E7EB;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+.btn-ghost:hover {
+  background: #F5F7FA;
+  border-color: #CBD5E1;
+}
+
+/* ===================== LAYOUT ===================== */
+.sidebar {
+  background: #FFFFFF;
+  border-right: 1px solid #E5E7EB;
+}
+
+.sidebar-active {
+  background: #E6F0FF;
+  border-left: 3px solid #0056D2;
+  color: #0056D2;
+}
+
+/* ===================== INPUTS ===================== */
+.input-field {
+  background: #FFFFFF;
+  border: 1.5px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #1F2937;
+  width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  font-size: 14px;
+}
+.input-field:focus {
+  border-color: #0056D2;
+  box-shadow: 0 0 0 3px rgba(0,86,210,0.1);
+}
+.input-field::placeholder { color: #9CA3AF; }
+
+/* ===================== BADGES ===================== */
+.badge {
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 100px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.badge-blue { background: #EFF6FF; color: #1D4ED8; }
+.badge-green { background: #F0FDF4; color: #16A34A; }
+.badge-orange { background: #FFFBEB; color: #D97706; }
+.badge-purple { background: #F5F3FF; color: #7C3AED; }
+.badge-gray { background: #F3F4F6; color: #6B7280; }
+.badge-red { background: #FEF2F2; color: #DC2626; }
+
+/* ===================== STAR RATING ===================== */
+.star-filled { color: #F59E0B; }
+.star-empty { color: #D1D5DB; }
+
+/* ===================== CHAT BUBBLES ===================== */
+.chat-bubble-ai {
+  background: #F5F7FA;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px 12px 12px 4px;
+  color: #1F2937;
+}
+.chat-bubble-user {
+  background: #0056D2;
+  color: #FFFFFF;
+  border-radius: 12px 12px 4px 12px;
+}
+
+/* ===================== PROGRESS BAR ===================== */
+.progress-bar {
+  background: #0056D2;
+  border-radius: 100px;
+  height: 6px;
+}
+
+/* ===================== TABS ===================== */
+.tab-active {
+  border-bottom: 2px solid #0056D2;
+  color: #0056D2;
+}
+
+/* ===================== NOTIFICATION BADGE ===================== */
+.notif-badge {
+  background: #EF4444;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+/* ===================== VIDEO PLAYER ===================== */
+.video-player {
+  background: #111827;
+  border-radius: 12px;
+  aspect-ratio: 16/9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===================== HERO BG (LANDING) ===================== */
+.hero-bg {
+  background: linear-gradient(135deg, #EEF2FF 0%, #E6F0FF 50%, #F0F9FF 100%);
+}
+
+/* ===================== SECTION BG ===================== */
+.section-alt { background: #F5F7FA; }
+.section-blue { background: #EEF6FF; }
+.section-white { background: #FFFFFF; }
+
+/* ===================== ANIMATIONS ===================== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.animate-fade-in-up { animation: fadeInUp 0.5s ease forwards; }
+.animate-fade-in { animation: fadeIn 0.4s ease forwards; }
+.animate-slide-in { animation: slideIn 0.3s ease forwards; }
+
+/* ===================== DIVIDER ===================== */
+.divider {
+  height: 1px;
+  background: #E5E7EB;
+}
+
+/* ===================== STAT CARD ===================== */
+.stat-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ===================== GRADIENT BORDER (blue) ===================== */
+.border-blue-soft {
+  border: 1.5px solid #BFDBFE;
+}
+
+/* ===================== SECTION HEADING ===================== */
+.section-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0056D2;
+}
+
+/* ===================== FEATURE CARD ===================== */
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #E6F0FF;
+}
+
+/* ===================== TESTIMONIAL ===================== */
+.testimonial-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ===================== OVERRIDE TAILWIND DARK CLASSES by reset ===================== */
+/* Ensure body is always light */
+#root { min-height: 100vh; }
