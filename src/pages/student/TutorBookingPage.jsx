@@ -8,7 +8,7 @@ import { Search, MapPin, Wifi, Home, SlidersHorizontal, CheckCircle, MessageSqua
 export default function TutorBookingPage() {
   const navigate = useNavigate();
   const [tab, setTab] = useState("online");
-  const [filters, setFilters] = useState({ subject: "All", city: "All", maxFee: 10000, rating: 0, preference: "all" });
+  const [filters, setFilters] = useState({ subject: "All", city: "All", rating: 0, preference: "all" });
   const [selectedTutor, setSelectedTutor] = useState(null);
   const [bookingStep, setBookingStep] = useState(0);
 
@@ -19,7 +19,6 @@ export default function TutorBookingPage() {
     if (tab === "offline" && !t.mode.includes("offline")) return false;
     if (filters.subject !== "All" && t.subject !== filters.subject) return false;
     if (filters.city !== "All" && t.location.city !== filters.city) return false;
-    if (t.monthlyFee > filters.maxFee) return false;
     if (t.rating < filters.rating) return false;
     return true;
   });
@@ -87,21 +86,6 @@ export default function TutorBookingPage() {
               )}
 
               <div>
-                <label className="text-xs font-semibold uppercase tracking-wider mb-2 block" style={{ color: "#6B7280" }}>
-                  Max Fee: ₹{filters.maxFee.toLocaleString()}/mo
-                </label>
-                <input
-                  type="range" min="500" max="10000" step="500"
-                  value={filters.maxFee}
-                  onChange={(e) => updateF("maxFee", +e.target.value)}
-                  className="w-full accent-blue-600"
-                />
-                <div className="flex justify-between text-xs mt-1" style={{ color: "#9CA3AF" }}>
-                  <span>₹500</span><span>₹10,000</span>
-                </div>
-              </div>
-
-              <div>
                 <label className="text-xs font-semibold uppercase tracking-wider mb-2 block" style={{ color: "#6B7280" }}>Min Rating</label>
                 <div className="flex gap-1 flex-wrap">
                   {[0, 3, 4, 4.5].map((r) => (
@@ -122,7 +106,7 @@ export default function TutorBookingPage() {
               </div>
 
               <button
-                onClick={() => setFilters({ subject: "All", city: "All", maxFee: 10000, rating: 0, preference: "all" })}
+                onClick={() => setFilters({ subject: "All", city: "All", rating: 0, preference: "all" })}
                 className="w-full py-2 rounded-lg text-xs font-medium transition-all"
                 style={{ color: "#0056D2", border: "1px solid #BFDBFE", background: "transparent" }}
                 onMouseEnter={(e) => (e.currentTarget.style.background = "#EFF6FF")}
@@ -157,7 +141,7 @@ export default function TutorBookingPage() {
           step={bookingStep}
           setStep={setBookingStep}
           onClose={() => { setSelectedTutor(null); setBookingStep(0); }}
-          onConfirm={() => navigate("/student/chat")}
+          onConfirm={() => navigate("/learner/chat")}
         />
       )}
     </DashboardLayout>
@@ -182,10 +166,7 @@ function TutorCard({ tutor, tab, onBook }) {
           <p className="text-sm font-semibold" style={{ color: "#0056D2" }}>{tutor.subject}</p>
           <p className="text-xs" style={{ color: "#6B7280" }}>{tutor.experience} experience</p>
         </div>
-        <div className="text-right shrink-0">
-          <p className="text-xl font-black" style={{ color: "#0056D2" }}>₹{tutor.monthlyFee.toLocaleString()}</p>
-          <p className="text-xs" style={{ color: "#9CA3AF" }}>per month</p>
-        </div>
+        {/* Fee removed per new requirement */}
       </div>
 
       <StarRating rating={tutor.rating} />
@@ -246,8 +227,7 @@ function BookingModal({ tutor, step, setStep, onClose, onConfirm }) {
             <p className="text-sm" style={{ color: "#4B5563" }}>{tutor.subject} · {tutor.experience}</p>
           </div>
           <div className="ml-auto text-right">
-            <p className="text-xl font-black" style={{ color: "#0056D2" }}>₹{tutor.monthlyFee.toLocaleString()}</p>
-            <p className="text-xs" style={{ color: "#9CA3AF" }}>/month</p>
+            <p className="text-sm font-semibold" style={{ color: "#6B7280" }}>Fee Negotiable</p>
           </div>
         </div>
 
@@ -309,10 +289,9 @@ function BookingModal({ tutor, step, setStep, onClose, onConfirm }) {
             <div className="space-y-3 mb-6 p-4 rounded-xl" style={{ background: "#F5F7FA" }}>
               {[
                 { label: "Session Mode", value: mode === "online" ? "🌐 Online" : "📍 Offline" },
-                { label: "Plan", value: "Monthly Subscription" },
-                { label: "Monthly Fee", value: `₹${tutor.monthlyFee.toLocaleString()}` },
-                { label: "Sessions/Week", value: "4-5 sessions" },
-                { label: "Starts", value: "This Monday" },
+                { label: "Plan", value: "Flexible (Discuss after connecting)" },
+                { label: "Fee", value: "To be decided" },
+                { label: "Sessions/Week", value: "Flexible" },
               ].map(({ label, value }) => (
                 <div key={label} className="flex justify-between text-sm">
                   <span style={{ color: "#4B5563" }}>{label}</span>
@@ -321,14 +300,14 @@ function BookingModal({ tutor, step, setStep, onClose, onConfirm }) {
               ))}
               <div className="h-px bg-gray-200 my-1" />
               <div className="flex justify-between">
-                <span className="font-bold" style={{ color: "#1F2937" }}>Total Due Now</span>
-                <span className="text-xl font-black" style={{ color: "#0056D2" }}>₹{tutor.monthlyFee.toLocaleString()}</span>
+                <span className="font-bold" style={{ color: "#1F2937" }}>Payment</span>
+                <span className="text-sm font-bold" style={{ color: "#0056D2" }}>Pay later after discussion</span>
               </div>
             </div>
             <div className="flex gap-3">
               <button onClick={() => setStep(1)} className="btn-ghost flex-1 py-3 rounded-xl text-sm">← Back</button>
               <button onClick={onConfirm} className="btn-primary flex-1 py-3 rounded-xl text-sm flex items-center justify-center gap-2">
-                <CheckCircle size={15} /> Confirm & Pay
+                <CheckCircle size={15} /> Send Request
               </button>
             </div>
           </div>

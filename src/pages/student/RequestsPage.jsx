@@ -3,59 +3,50 @@ import { useNavigate } from "react-router-dom";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import { studentRequests, tutorPosts } from "../../data/dummyData";
 import { StarRating } from "../../components/shared/StarRating";
-import { Plus, MapPin, MessageSquare, CheckCircle, X, Users, DollarSign } from "lucide-react";
+import { Plus, MapPin, MessageSquare, CheckCircle, X, Users, DollarSign, BookOpen } from "lucide-react";
 
 export default function RequestsPage() {
   const navigate = useNavigate();
-  const [tab, setTab] = useState("student");
+  const [tab, setTab] = useState("sessions");
   const [showPostForm, setShowPostForm] = useState(false);
   const [form, setForm] = useState({ subject: "", location: "", budget: "", mode: "online", preference: "home_tuition", description: "" });
   const updateForm = (k, v) => setForm((p) => ({ ...p, [k]: v }));
 
   return (
-    <DashboardLayout role="student">
+    <DashboardLayout role="learner">
       <div className="flex items-start justify-between mb-7 flex-wrap gap-4">
         <div>
-          <h1 className="text-2xl font-black" style={{ color: "#1F2937" }}>Request Board</h1>
-          <p className="text-sm mt-1" style={{ color: "#4B5563" }}>Find tutors by request or browse tutor availability</p>
+          <h1 className="text-2xl font-black" style={{ color: "#1F2937" }}>Requests Board</h1>
+          <p className="text-sm mt-1" style={{ color: "#4B5563" }}>Track your tutoring and material requests.</p>
         </div>
-        <button onClick={() => setShowPostForm(true)} className="btn-primary flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm">
-          <Plus size={17} /> Post My Requirement
-        </button>
-      </div>
-
-      {/* Tabs */}
-      <div className="flex gap-1 p-1 rounded-xl w-fit mb-6" style={{ background: "#F5F7FA", border: "1px solid #E5E7EB" }}>
-        {[
-          { key: "student", label: "🎓 Student Requests" },
-          { key: "tutor", label: "👨‍🏫 Tutor Availability" },
-        ].map(({ key, label }) => (
-          <button
-            key={key}
-            onClick={() => setTab(key)}
-            className="px-5 py-2.5 rounded-lg text-sm font-semibold transition-all"
-            style={{ background: tab === key ? "#0056D2" : "transparent", color: tab === key ? "#FFFFFF" : "#4B5563" }}
-          >
-            {label}
+        <div className="flex items-center gap-3">
+          <div className="flex gap-1 p-1 bg-gray-100 rounded-lg">
+            {["sessions", "materials"].map(t => (
+              <button key={t} onClick={() => setTab(t)} className={`px-4 py-2 text-sm font-semibold rounded-md transition-all ${tab === t ? "bg-white shadow-sm text-blue-600" : "text-gray-500"}`}>
+                {t.charAt(0).toUpperCase() + t.slice(1)}
+              </button>
+            ))}
+          </div>
+          <button onClick={() => setShowPostForm(true)} className="btn-primary flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm">
+            <Plus size={17} /> Post My Requirement
           </button>
-        ))}
+        </div>
       </div>
 
-      {tab === "student" && (
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="space-y-4">
-          {studentRequests.map((req) => (
-            <StudentRequestCard key={req.id} req={req} onAccept={() => navigate("/student/chat")} />
+          <h3 className="font-bold text-gray-800 flex items-center gap-2 px-1"><Users size={18} /> Direct Requests</h3>
+          {studentRequests.map(req => (
+            <StudentRequestCard key={req.id} req={req} onAccept={() => navigate("/learner/chat")} />
           ))}
         </div>
-      )}
-
-      {tab === "tutor" && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {tutorPosts.map((post) => (
-            <TutorPostCard key={post.id} post={post} onAccept={() => navigate("/student/chat")} />
+        <div className="space-y-4">
+          <h3 className="font-bold text-gray-800 flex items-center gap-2 px-1"><BookOpen size={18} /> Public Posts</h3>
+          {tutorPosts.map(post => (
+            <TutorPostCard key={post.id} post={post} onAccept={() => navigate("/learner/chat")} />
           ))}
         </div>
-      )}
+      </div>
 
       {/* Post Form Modal */}
       {showPostForm && (

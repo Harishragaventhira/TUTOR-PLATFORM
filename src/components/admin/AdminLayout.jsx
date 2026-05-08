@@ -7,6 +7,7 @@ export default function AdminLayout() {
   const navigation = [
     { name: 'Dashboard', href: '/admin/dashboard', icon: '📊' },
     { name: 'Tutor Verifications', href: '/admin/verifications', icon: '✅' },
+    { name: 'Student Verifications', href: '/admin/student-verifications', icon: '📝' },
     { name: 'Student Management', href: '/admin/students', icon: '👨‍🎓' },
     { name: 'Course Management', href: '/admin/courses', icon: '📚' },
     { name: 'Platform Settings', href: '/admin/settings', icon: '⚙️' },

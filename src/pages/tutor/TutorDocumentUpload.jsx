@@ -17,7 +17,7 @@ export default function TutorDocumentUpload() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Simulate submission flow
-    navigate('/tutor/verification-pending');
+    navigate('/tutor/courses');
   };
 
   return (

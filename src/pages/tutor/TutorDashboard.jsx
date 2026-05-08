@@ -8,6 +8,9 @@ const tutorCourses = courses.filter((c) => c.tutorId === 1);
 
 export default function TutorDashboard() {
   const navigate = useNavigate();
+  
+  // Get logged-in user from localStorage
+  const sessionUser = JSON.parse(localStorage.getItem('user')) || { username: 'Tutor' };
 
   const stats = [
     { icon: DollarSign, label: "This Month", value: `₹${tutorProfile.thisMonthEarnings.toLocaleString()}`, sub: "Earnings", color: "#22C55E", bg: "#F0FDF4" },
@@ -22,7 +25,7 @@ export default function TutorDashboard() {
       <div className="flex items-start justify-between mb-7 flex-wrap gap-4">
         <div>
           <h1 className="text-2xl font-black" style={{ color: "#1F2937" }}>
-            Welcome, <span style={{ color: "#0056D2" }}>{tutorProfile.name.split(" ")[0]}! 👋</span>
+            Welcome, <span style={{ color: "#0056D2" }}>{sessionUser.username.split(" ")[0]}! 👋</span>
           </h1>
           <p className="text-sm mt-1" style={{ color: "#4B5563" }}>Here's your teaching dashboard overview</p>
         </div>

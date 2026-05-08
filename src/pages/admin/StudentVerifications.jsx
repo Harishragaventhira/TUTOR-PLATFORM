@@ -1,27 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-export default function TutorVerifications() {
+export default function StudentVerifications() {
   const [filter, setFilter] = useState('All');
-  const [tutors, setTutors] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [students, setStudents] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchTutors = async () => {
-      try {
-        const res = await fetch('/api/admin/tutors');
-        if (res.ok) {
-          const data = await res.json();
-          setTutors(data);
-        }
-      } catch (err) {
-        console.error("Fetch error:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchTutors();
+    fetchStudents();
   }, []);
+
+  const fetchStudents = async () => {
+    try {
+      const response = await fetch('/api/admin/students');
+      if (response.ok) {
+        const data = await response.json();
+        setStudents(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch students", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const getStatusBadge = (status) => {
     switch (status) {
@@ -36,15 +37,15 @@ export default function TutorVerifications() {
     }
   };
 
-  const filteredData = tutors.filter(t => {
+  const filteredData = students.filter(s => {
     if (filter === 'All') return true;
-    if (filter === 'Pending') return t.status === 'pending_admin';
-    if (filter === 'Approved') return t.status === 'approved';
-    if (filter === 'Rejected') return t.status === 'rejected';
+    if (filter === 'Pending') return s.status === 'pending_admin';
+    if (filter === 'Approved') return s.status === 'approved';
+    if (filter === 'Rejected') return s.status === 'rejected';
     return true;
   });
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
@@ -55,7 +56,7 @@ export default function TutorVerifications() {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div className="p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-center bg-gray-50">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4 sm:mb-0">Tutor Applications</h2>
+        <h2 className="text-lg font-semibold text-gray-800 mb-4 sm:mb-0">Student Applications</h2>
         <div className="flex space-x-2">
           {['All', 'Pending', 'Approved', 'Rejected'].map((status) => (
             <button
@@ -78,13 +79,13 @@ export default function TutorVerifications() {
           <thead className="bg-gray-50">
             <tr>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Tutor
+                Student
               </th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Subject
+                Standard / School
               </th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Location
+                Applied Date
               </th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Status
@@ -95,36 +96,34 @@ export default function TutorVerifications() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {filteredData.map((tutor) => {
-              const profile = tutor.tutorProfile || {};
-              const currentAddress = (tutor.addresses || []).find(a => a.address_type === 'current') || {};
-              
+            {filteredData.map((student) => {
+              const profile = student.studentProfile || {};
               return (
-                <tr key={tutor.id} className="hover:bg-gray-50 transition-colors">
+                <tr key={student.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold uppercase">
-                        {tutor.username.charAt(0)}
+                        {student.username.charAt(0)}
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">{tutor.username}</div>
-                        <div className="text-sm text-gray-500">{tutor.email}</div>
+                        <div className="text-sm font-medium text-gray-900">{student.username}</div>
+                        <div className="text-sm text-gray-500">{student.email}</div>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{profile.subject || 'N/A'}</div>
-                    <div className="text-sm text-gray-500">{profile.experience || 'No exp.'}</div>
+                    <div className="text-sm text-gray-900">{profile.standard || profile.course || 'N/A'}</div>
+                    <div className="text-sm text-gray-500">{profile.school_name || profile.college_name || 'N/A'}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {currentAddress.area ? `${currentAddress.area}, ${currentAddress.district}` : 'Unknown'}
+                    {new Date(student.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {getStatusBadge(tutor.status)}
+                    {getStatusBadge(student.status)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <Link 
-                      to={`/admin/verifications/${tutor.id}`} 
+                      to={`/admin/student-verifications/${student.id}`} 
                       className="text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-md transition-colors"
                     >
                       Review
@@ -136,7 +135,7 @@ export default function TutorVerifications() {
             {filteredData.length === 0 && (
               <tr>
                 <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
-                  No tutor applications found.
+                  No student applications found.
                 </td>
               </tr>
             )}

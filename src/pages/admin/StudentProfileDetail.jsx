@@ -34,11 +34,11 @@ export default function StudentProfileDetail() {
             <p className="text-sm text-gray-500 mt-1">Joined: {student.joinDate}</p>
           </div>
           <div className="flex flex-col gap-3 min-w-[140px]">
-            <button className="w-full px-4 py-2 bg-white text-blue-600 border border-blue-200 rounded-md hover:bg-blue-50 transition font-medium shadow-sm">
-              Message Student
+            <button className="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition font-medium shadow-sm">
+              Approve Student
             </button>
             <button className="w-full px-4 py-2 bg-white text-red-600 border border-red-200 rounded-md hover:bg-red-50 transition font-medium shadow-sm">
-              Suspend Account
+              Reject Student
             </button>
           </div>
         </div>
@@ -80,6 +80,30 @@ export default function StudentProfileDetail() {
                 <dd className="mt-1 text-sm text-gray-900 font-medium">{student.budget}</dd>
               </div>
             </dl>
+          </div>
+        </div>
+
+        <div className="p-6 border-t border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b pb-2">Skill Assessment Test Results</h3>
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-4 text-center">
+            {['Reading', 'Writing', 'Speaking', 'Listening', 'Observation', 'Recall'].map(skill => (
+              <div key={skill} className="bg-gray-50 p-3 rounded-lg border">
+                <p className="text-xs text-gray-500 uppercase font-semibold">{skill}</p>
+                <p className="text-xl font-bold text-blue-600">8/10</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 p-4 bg-blue-50 rounded-lg flex justify-between items-center">
+            <span className="font-semibold text-blue-900">Calculated Average: 8.0</span>
+            <span className="badge badge-blue">Fast Learner</span>
+          </div>
+        </div>
+
+        <div className="p-6 border-t border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b pb-2">Documents & Verification</h3>
+          <div className="flex gap-4">
+            <button className="px-4 py-2 border rounded-lg bg-gray-50 font-medium text-sm flex items-center gap-2">📄 View School/College ID</button>
+            <button className="px-4 py-2 border rounded-lg bg-gray-50 font-medium text-sm flex items-center gap-2">📄 Other Documents</button>
           </div>
         </div>
       </div>

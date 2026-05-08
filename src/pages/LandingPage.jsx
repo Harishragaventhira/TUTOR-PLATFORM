@@ -5,7 +5,17 @@ import {
   BookOpen, Brain, MapPin, Wifi, CheckCircle,
   ArrowRight, Users, TrendingUp, Shield, Zap,
   ChevronRight, Share2, Link, Globe, ExternalLink,
+  Calculator, Atom, FlaskConical, Microscope, Languages, Code
 } from "lucide-react";
+
+const popularSubjects = [
+  { name: "Mathematics", icon: Calculator, color: "#3B82F6", courses: "120+ Courses", tutors: "450+ Tutors" },
+  { name: "Physics", icon: Atom, color: "#8B5CF6", courses: "90+ Courses", tutors: "320+ Tutors" },
+  { name: "Chemistry", icon: FlaskConical, color: "#10B981", courses: "110+ Courses", tutors: "380+ Tutors" },
+  { name: "Biology", icon: Microscope, color: "#EC4899", courses: "80+ Courses", tutors: "290+ Tutors" },
+  { name: "English", icon: Languages, color: "#F59E0B", courses: "150+ Courses", tutors: "510+ Tutors" },
+  { name: "Comp. Sci", icon: Code, color: "#6366F1", courses: "200+ Courses", tutors: "600+ Tutors" },
+];
 
 const features = [
   { icon: BookOpen, title: "Recorded Courses", desc: "Learn at your own pace with HD video courses from top educators", color: "#0056D2", bg: "#EFF6FF" },
@@ -83,7 +93,7 @@ export default function LandingPage() {
 
         <div className="flex items-center gap-3">
           <button
-            onClick={() => navigate("/student")}
+            onClick={() => navigate("/login")}
             className="text-sm font-semibold px-4 py-2 rounded-lg transition-all hidden sm:block"
             style={{ color: "#0056D2", border: "1.5px solid #0056D2" }}
             onMouseEnter={(e) => (e.currentTarget.style.background = "#EFF6FF")}
@@ -92,10 +102,10 @@ export default function LandingPage() {
             Sign In
           </button>
           <button
-            onClick={() => navigate("/student")}
+            onClick={() => navigate("/signup")}
             className="btn-primary text-sm px-5 py-2 rounded-lg"
           >
-            Get Started
+            Sign Up
           </button>
         </div>
       </nav>
@@ -138,7 +148,7 @@ export default function LandingPage() {
             style={{ animationDelay: "0.3s" }}
           >
             <button
-              onClick={() => navigate("/student/register")}
+              onClick={() => navigate("/signup")}
               className="btn-primary flex items-center gap-3 px-8 py-4 rounded-xl font-bold text-lg w-full sm:w-auto justify-center"
             >
               <Users size={20} />
@@ -146,7 +156,7 @@ export default function LandingPage() {
               <ArrowRight size={18} />
             </button>
             <button
-              onClick={() => navigate("/tutor/register")}
+              onClick={() => navigate("/signup")}
               className="btn-secondary flex items-center gap-3 px-8 py-4 rounded-xl font-bold text-lg w-full sm:w-auto justify-center"
             >
               <TrendingUp size={20} />
@@ -180,6 +190,40 @@ export default function LandingPage() {
                 <div className="text-xs font-medium" style={{ color: "#6B7280" }}>{label}</div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== POPULAR SUBJECTS ===== */}
+      <section className="py-20 px-6" style={{ background: "#F9FAFB" }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="section-label mb-3">Explore Categories</p>
+            <h2 className="text-4xl font-black mb-4" style={{ color: "#1F2937" }}>
+              Learn from <span style={{ color: "#0056D2" }}>Top Subjects</span>
+            </h2>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {popularSubjects.map((sub, i) => {
+              const Icon = sub.icon;
+              return (
+                <a 
+                  key={i} 
+                  href="#join-section"
+                  className="flex flex-col items-center p-6 bg-white rounded-2xl shadow-sm hover:shadow-md transition-all text-center border border-gray-100 hover:border-blue-200 cursor-pointer group"
+                  style={{ textDecoration: 'none' }}
+                >
+                  <div className="w-14 h-14 rounded-full flex items-center justify-center mb-4 transition-transform group-hover:scale-110" style={{ background: `${sub.color}15` }}>
+                    <Icon size={26} style={{ color: sub.color }} />
+                  </div>
+                  <h3 className="font-bold text-gray-800 mb-2 truncate w-full">{sub.name}</h3>
+                  <div className="flex flex-col gap-1 w-full mt-auto pt-3 border-t border-gray-50">
+                    <span className="text-xs text-gray-500 font-medium">{sub.courses}</span>
+                    <span className="text-xs text-gray-500 font-medium">{sub.tutors}</span>
+                  </div>
+                </a>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -269,7 +313,7 @@ export default function LandingPage() {
               </div>
             ))}
             <button
-              onClick={() => navigate("/student/register")}
+              onClick={() => navigate("/signup")}
               className="btn-primary w-full py-3 rounded-xl mt-6 flex items-center justify-center gap-2"
             >
               Start Learning Free <ArrowRight size={16} />
@@ -294,7 +338,7 @@ export default function LandingPage() {
               </div>
             ))}
             <button
-              onClick={() => navigate("/tutor/register")}
+              onClick={() => navigate("/signup")}
               className="btn-secondary w-full py-3 rounded-xl mt-6 flex items-center justify-center gap-2"
             >
               Start Teaching Today <ArrowRight size={16} />
@@ -333,7 +377,7 @@ export default function LandingPage() {
       </section>
 
       {/* ===== CTA BANNER ===== */}
-      <section className="py-20 px-6" style={{ background: "#0056D2" }}>
+      <section id="join-section" className="py-20 px-6" style={{ background: "#0056D2" }}>
         <div className="max-w-4xl mx-auto text-center">
           <Shield size={44} className="text-white/80 mx-auto mb-6" />
           <h2 className="text-4xl font-black text-white mb-4">
@@ -344,7 +388,7 @@ export default function LandingPage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
-              onClick={() => navigate("/student/register")}
+              onClick={() => navigate("/signup")}
               className="px-10 py-4 rounded-xl font-bold text-lg flex items-center gap-2 w-full sm:w-auto justify-center transition-all"
               style={{ background: "#FFFFFF", color: "#0056D2" }}
               onMouseEnter={(e) => (e.currentTarget.style.background = "#E6F0FF")}
@@ -353,7 +397,7 @@ export default function LandingPage() {
               Join as Student <ArrowRight size={18} />
             </button>
             <button
-              onClick={() => navigate("/tutor/register")}
+              onClick={() => navigate("/signup")}
               className="px-10 py-4 rounded-xl font-bold text-lg flex items-center gap-2 w-full sm:w-auto justify-center transition-all"
               style={{ background: "rgba(255,255,255,0.15)", color: "#FFFFFF", border: "1.5px solid rgba(255,255,255,0.4)" }}
               onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.22)")}

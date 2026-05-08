@@ -8,20 +8,23 @@ const enrolledCourses = courses.filter((c) => studentProfile.enrolledCourses.inc
 
 export default function StudentDashboard() {
   const navigate = useNavigate();
+  
+  // Get logged-in user from localStorage
+  const sessionUser = JSON.parse(localStorage.getItem('user')) || { username: 'Student' };
 
   const stats = [
     { icon: BookOpen, label: "Enrolled Courses", value: enrolledCourses.length, color: "#0056D2", bg: "#EFF6FF" },
     { icon: Flame, label: "Day Streak", value: `${studentProfile.streak} days`, color: "#F59E0B", bg: "#FFFBEB" },
-    { icon: Users, label: "Booked Tutors", value: studentProfile.bookedTutors.length, color: "#22C55E", bg: "#F0FDF4" },
-    { icon: Trophy, label: "Target Exam", value: studentProfile.targetExam, color: "#7C3AED", bg: "#F5F3FF" },
+    { icon: Users, label: "Hand Shaken Faculty", value: 3, color: "#22C55E", bg: "#F0FDF4" }, // updated
+    { icon: Trophy, label: "Undergoing Tutoring", value: 2, color: "#7C3AED", bg: "#F5F3FF" }, // updated
   ];
 
   return (
-    <DashboardLayout role="student">
+    <DashboardLayout role="learner">
       {/* Welcome */}
       <div className="mb-7">
         <h1 className="text-2xl font-black" style={{ color: "#1F2937" }}>
-          Welcome back, <span style={{ color: "#0056D2" }}>{studentProfile.name.split(" ")[0]}! 👋</span>
+          Welcome back, <span style={{ color: "#0056D2" }}>{sessionUser.username.split(" ")[0]}! 👋</span>
         </h1>
         <p className="text-sm mt-1" style={{ color: "#4B5563" }}>Ready to continue your learning journey?</p>
       </div>
@@ -44,7 +47,7 @@ export default function StudentDashboard() {
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold" style={{ color: "#1F2937" }}>Continue Learning</h2>
           <button
-            onClick={() => navigate("/student/courses")}
+            onClick={() => navigate("/learner/courses")}
             className="flex items-center gap-1 text-sm font-semibold transition-colors"
             style={{ color: "#0056D2" }}
           >
@@ -53,14 +56,14 @@ export default function StudentDashboard() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {enrolledCourses.map((course) => {
-            const total = course.chapters.reduce((a, c) => a + c.lessons.length, 0);
-            const done = course.chapters.reduce((a, c) => a + c.lessons.filter((l) => l.completed).length, 0);
-            const pct = Math.round((done / total) * 100);
+            const total = course.chapters?.length || 0;
+            const done = 0;
+            const pct = 0;
             return (
               <div
                 key={course.id}
                 className="glass-card p-5 card-hover cursor-pointer"
-                onClick={() => navigate(`/student/course/${course.id}`)}
+                onClick={() => navigate(`/learner/course/${course.id}`)}
               >
                 <div className="flex items-start gap-4 mb-4">
                   <div
@@ -94,9 +97,9 @@ export default function StudentDashboard() {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-7">
         {[
-          { label: "Browse All Courses", desc: "Explore 3,200+ courses", icon: BookOpen, path: "/student/courses", color: "#0056D2", bg: "#EFF6FF" },
-          { label: "Book a Tutor", desc: "Find tutors near you", icon: Users, path: "/student/tutors", color: "#7C3AED", bg: "#F5F3FF" },
-          { label: "Post Requirement", desc: "Let tutors find you", icon: ArrowRight, path: "/student/requests", color: "#0891B2", bg: "#F0F9FF" },
+          { label: "Browse All Courses", desc: "Explore 3,200+ courses", icon: BookOpen, path: "/learner/courses", color: "#0056D2", bg: "#EFF6FF" },
+          { label: "Search Faculty", desc: "By Subject/Location", icon: Users, path: "/learner/tutors", color: "#7C3AED", bg: "#F5F3FF" },
+          { label: "My Subscriptions", desc: "View & Renew", icon: ArrowRight, path: "/learner/subscriptions", color: "#0891B2", bg: "#F0F9FF" },
         ].map(({ label, desc, icon: Icon, path, color, bg }) => (
           <button
             key={label}
@@ -120,7 +123,7 @@ export default function StudentDashboard() {
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold" style={{ color: "#1F2937" }}>Recommended Tutors</h2>
           <button
-            onClick={() => navigate("/student/tutors")}
+            onClick={() => navigate("/learner/tutors")}
             className="flex items-center gap-1 text-sm font-semibold"
             style={{ color: "#0056D2" }}
           >
@@ -145,7 +148,7 @@ export default function StudentDashboard() {
                   <p className="text-xs" style={{ color: "#9CA3AF" }}>per month</p>
                 </div>
                 <button
-                  onClick={() => navigate("/student/tutors")}
+                  onClick={() => navigate("/learner/tutors")}
                   className="btn-primary px-4 py-2 rounded-lg text-sm"
                 >
                   Book

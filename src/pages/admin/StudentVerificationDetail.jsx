@@ -1,44 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-export default function TutorVerificationDetail() {
+export default function StudentVerificationDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [tutor, setTutor] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [student, setStudent] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [rejectionReason, setRejectionReason] = useState('');
   const [showRejectModal, setShowRejectModal] = useState(false);
 
   useEffect(() => {
-    const fetchTutor = async () => {
+    const fetchStudent = async () => {
       try {
-        const res = await fetch(`/api/admin/users/${id}`);
-        if (res.ok) {
-          const data = await res.json();
-          setTutor(data);
+        const response = await fetch(`/api/admin/users/${id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setStudent(data);
         }
-      } catch (err) {
-        console.error("Fetch error:", err);
+      } catch (error) {
+        console.error(error);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
-    fetchTutor();
+    fetchStudent();
   }, [id]);
 
   const updateStatus = async (newStatus) => {
     try {
-      const res = await fetch(`/api/admin/users/${id}/status`, {
+      const response = await fetch(`/api/admin/users/${id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus })
       });
-      if (res.ok) {
-        alert(`Tutor ${tutor.username} ${newStatus} successfully.`);
-        navigate('/admin/verifications');
+      if (response.ok) {
+        alert(`Student ${student.username} ${newStatus} successfully.`);
+        navigate('/admin/student-verifications');
       }
-    } catch (err) {
-      alert("Error updating status");
+    } catch (error) {
+      alert(error.message);
     }
   };
 
@@ -48,18 +48,11 @@ export default function TutorVerificationDetail() {
     setShowRejectModal(false);
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
+  if (isLoading) return <div className="p-10 text-center">Loading...</div>;
+  if (!student) return <div className="p-10 text-center">Student not found</div>;
 
-  if (!tutor) return <div className="p-6 text-center">Tutor not found</div>;
-
-  const profile = tutor.tutorProfile || {};
-  const addresses = tutor.addresses || [];
+  const profile = student.studentProfile || {};
+  const addresses = student.addresses || [];
   const currentAddress = addresses.find(a => a.address_type === 'current') || {};
 
   return (
@@ -72,28 +65,28 @@ export default function TutorVerificationDetail() {
           <span className="mr-2">←</span> Back to List
         </button>
         <span className={`px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full border ${
-          tutor.status === 'pending_admin' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' :
-          tutor.status === 'approved' ? 'bg-green-100 text-green-800 border-green-200' :
+          student.status === 'pending_admin' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' :
+          student.status === 'approved' ? 'bg-green-100 text-green-800 border-green-200' :
           'bg-red-100 text-red-800 border-red-200'
         }`}>
-          Status: {tutor.status === 'pending_admin' ? 'Pending Approval' : tutor.status.charAt(0).toUpperCase() + tutor.status.slice(1)}
+          Status: {student.status === 'pending_admin' ? 'Pending Approval' : student.status.charAt(0).toUpperCase() + student.status.slice(1)}
         </span>
       </div>
 
       <div className="bg-white shadow-sm rounded-xl border border-gray-200 overflow-hidden">
         <div className="p-6 bg-gray-50 border-b border-gray-200 flex flex-col md:flex-row gap-6 items-center md:items-start">
           <div className="h-24 w-24 bg-blue-600 rounded-full flex-shrink-0 flex items-center justify-center text-white text-3xl font-bold shadow-md uppercase">
-            {tutor.username.charAt(0)}
+            {student.username.charAt(0)}
           </div>
           <div className="flex-1 text-center md:text-left">
-            <h1 className="text-2xl font-bold text-gray-900">{tutor.username}</h1>
-            <p className="text-gray-500 mt-1">{tutor.email} • {tutor.mobile || 'No Phone'}</p>
+            <h1 className="text-2xl font-bold text-gray-900">{student.username}</h1>
+            <p className="text-gray-500 mt-1">{student.email} • {student.mobile || 'No Phone'}</p>
             <div className="mt-4 flex flex-wrap gap-2 justify-center md:justify-start">
-              <span className="badge badge-blue">Native: {profile.native_place || 'N/A'}</span>
-              <span className="badge badge-green">Experience: {profile.experience || 'N/A'}</span>
+               <span className="badge badge-blue">Native: {profile.native_place || 'N/A'}</span>
+               <span className="badge badge-green">Classification: {profile.classification || 'N/A'}</span>
             </div>
           </div>
-          {tutor.status === 'pending_admin' && (
+          {student.status === 'pending_admin' && (
             <div className="flex flex-col gap-3 min-w-[140px]">
               <button 
                 onClick={handleApprove}
@@ -113,26 +106,26 @@ export default function TutorVerificationDetail() {
 
         <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b pb-2">Professional Details</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b pb-2">Academic Details</h3>
             <dl className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
               <div className="sm:col-span-1">
-                <dt className="text-sm font-medium text-gray-500">Subject</dt>
-                <dd className="mt-1 text-sm text-gray-900 font-medium">{profile.subject || 'Not Provided'}</dd>
+                <dt className="text-sm font-medium text-gray-500">School/College</dt>
+                <dd className="mt-1 text-sm text-gray-900 font-medium">{profile.school_name || profile.college_name || 'N/A'}</dd>
               </div>
               <div className="sm:col-span-1">
-                <dt className="text-sm font-medium text-gray-500">Monthly Fee</dt>
-                <dd className="mt-1 text-sm text-gray-900 font-medium">₹{profile.monthly_fee || '0'}</dd>
+                <dt className="text-sm font-medium text-gray-500">Grade/Standard</dt>
+                <dd className="mt-1 text-sm text-gray-900 font-medium">{profile.standard || profile.course || 'N/A'}</dd>
               </div>
               <div className="sm:col-span-1">
-                <dt className="text-sm font-medium text-gray-500">Teaching Mode</dt>
-                <dd className="mt-1 text-sm text-gray-900 font-medium">{profile.mode || 'Not Provided'}</dd>
+                <dt className="text-sm font-medium text-gray-500">Target Exam</dt>
+                <dd className="mt-1 text-sm text-gray-900 font-medium">{profile.exam_name || 'N/A'}</dd>
               </div>
               <div className="sm:col-span-1">
-                <dt className="text-sm font-medium text-gray-500">Qualification</dt>
-                <dd className="mt-1 text-sm text-gray-900 font-medium">{profile.qualification || 'Not Provided'}</dd>
+                <dt className="text-sm font-medium text-gray-500">Avg. Skill Score</dt>
+                <dd className="mt-1 text-sm text-gray-900 font-medium">{profile.avg_score || '0'}/10</dd>
               </div>
               <div className="sm:col-span-2">
-                <dt className="text-sm font-medium text-gray-500">Current Address</dt>
+                <dt className="text-sm font-medium text-gray-500">Address</dt>
                 <dd className="mt-1 text-sm text-gray-900 font-medium">
                   {currentAddress.door_no}, {currentAddress.street_address}, {currentAddress.area}, {currentAddress.district}, {currentAddress.state} - {currentAddress.pincode}
                 </dd>
@@ -141,27 +134,21 @@ export default function TutorVerificationDetail() {
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b pb-2">Educational Background</h3>
-            <div className="space-y-4">
-               {profile.education_details ? (
-                 <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                    <pre className="text-xs text-gray-600 whitespace-pre-wrap">
-                      {JSON.stringify(profile.education_details, null, 2)}
-                    </pre>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b pb-2">Detailed Skill Scores</h3>
+            <div className="grid grid-cols-2 gap-4">
+               {[
+                 { label: 'Reading', score: profile.reading_score },
+                 { label: 'Writing', score: profile.writing_score },
+                 { label: 'Speaking', score: profile.speaking_score },
+                 { label: 'Listening', score: profile.listening_score },
+                 { label: 'Observation', score: profile.observation_score },
+                 { label: 'Recall', score: profile.recall_score }
+               ].map(s => (
+                 <div key={s.label} className="flex justify-between items-center p-2 bg-gray-50 rounded border border-gray-200">
+                    <span className="text-xs font-medium text-gray-600">{s.label}</span>
+                    <span className="text-sm font-bold text-blue-600">{s.score || 0}/10</span>
                  </div>
-               ) : (
-                 <p className="text-sm text-gray-500 italic">No detailed education info provided.</p>
-               )}
-               <h4 className="text-sm font-bold text-gray-700 mt-4 uppercase">Experience</h4>
-               {profile.experience_details ? (
-                 <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                    <pre className="text-xs text-gray-600 whitespace-pre-wrap">
-                      {JSON.stringify(profile.experience_details, null, 2)}
-                    </pre>
-                 </div>
-               ) : (
-                 <p className="text-sm text-gray-500 italic">No experience details provided.</p>
-               )}
+               ))}
             </div>
           </div>
         </div>
@@ -172,7 +159,7 @@ export default function TutorVerificationDetail() {
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
             <h3 className="text-lg font-bold text-gray-900 mb-4">Reject Application</h3>
             <p className="text-sm text-gray-600 mb-4">
-              Please provide a reason for rejecting {tutor.username}'s application. This will be visible to the tutor.
+              Please provide a reason for rejecting {student.username}'s application. This will be visible to the student.
             </p>
             <textarea
               className="w-full border border-gray-300 rounded-md p-3 focus:ring-red-500 focus:border-red-500"

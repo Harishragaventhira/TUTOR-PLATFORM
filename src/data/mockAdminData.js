@@ -95,5 +95,41 @@ export const mockAdminStats = {
   totalCourses: 89,
   totalBookings: 342,
   activeRequests: 45,
-  revenue: "₹4,50,000"
 };
+
+export const mockStudentVerifications = [
+  {
+    id: "SVREQ-001",
+    studentName: "Arjun Kumar",
+    email: "arjun123@example.com",
+    phone: "+91 7766554433",
+    board: "CBSE",
+    standard: "12th Grade",
+    status: "Pending",
+    appliedDate: "2023-10-18",
+    documents: [
+      { name: "School_ID.pdf", type: "ID Proof" },
+      { name: "Previous_Marksheet.pdf", type: "Education" }
+    ],
+    bio: "Looking for a physics and math tutor for board exams.",
+    location: "Delhi, 110001",
+    targetSubjects: ["Physics", "Mathematics"]
+  },
+  {
+    id: "SVREQ-002",
+    studentName: "Sneha Reddy",
+    email: "sneha.r@example.com",
+    phone: "+91 8877665544",
+    board: "State Board",
+    standard: "11th Grade",
+    status: "Rejected",
+    appliedDate: "2023-10-16",
+    rejectionReason: "ID proof is not clear.",
+    documents: [
+      { name: "Aadhar.pdf", type: "ID Proof" }
+    ],
+    bio: "I need help with chemistry organic reactions.",
+    location: "Hyderabad, 500001",
+    targetSubjects: ["Chemistry"]
+  }
+];

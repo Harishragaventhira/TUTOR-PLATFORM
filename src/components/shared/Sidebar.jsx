@@ -1,31 +1,37 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, BookOpen, Users, MessageSquare, ClipboardList,
-  TrendingUp, Upload, Settings, ChevronRight, X, ArrowLeftRight,
+  TrendingUp, Upload, Settings, ChevronRight, X, User, CreditCard, Video
 } from "lucide-react";
 
-const studentNav = [
-  { icon: LayoutDashboard, label: "Dashboard", path: "/student" },
-  { icon: BookOpen, label: "My Courses", path: "/student/courses" },
-  { icon: Users, label: "Book a Tutor", path: "/student/tutors" },
-  { icon: ClipboardList, label: "Requests", path: "/student/requests" },
-  { icon: MessageSquare, label: "Messages", path: "/student/chat" },
+const learnerNav = [
+  { icon: LayoutDashboard, label: "Dashboard", path: "/learner" },
+  { icon: User, label: "My Profile", path: "/learner/profile" },
+  { icon: BookOpen, label: "Courses", path: "/learner/courses" },
+  { icon: Users, label: "Search Faculty", path: "/learner/tutors" },
+  { icon: Video, label: "Undergoing Tutoring", path: "/learner/tutoring" },
+  { icon: ClipboardList, label: "Requests", path: "/learner/requests" },
+  { icon: CreditCard, label: "Subscriptions", path: "/learner/subscriptions" },
+  { icon: MessageSquare, label: "Messages", path: "/learner/chat" },
 ];
 
 const tutorNav = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/tutor" },
+  { icon: User, label: "My Profile", path: "/tutor/profile" },
+  { icon: Video, label: "Undergoing Tutoring", path: "/tutor/tutoring" },
   { icon: Upload, label: "Upload Course", path: "/tutor/upload" },
   { icon: BookOpen, label: "My Courses", path: "/tutor/courses" },
   { icon: TrendingUp, label: "Earnings", path: "/tutor/earnings" },
   { icon: ClipboardList, label: "Student Requests", path: "/tutor/requests" },
+  { icon: CreditCard, label: "Subscriptions", path: "/tutor/subscriptions" },
   { icon: MessageSquare, label: "Messages", path: "/tutor/chat" },
   { icon: Settings, label: "Availability", path: "/tutor/availability" },
 ];
 
-export default function Sidebar({ role = "student", open, onClose }) {
+export default function Sidebar({ role = "learner", open, onClose }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const navItems = role === "tutor" ? tutorNav : studentNav;
+  const navItems = role === "tutor" ? tutorNav : learnerNav;
 
   return (
     <>
@@ -45,7 +51,7 @@ export default function Sidebar({ role = "student", open, onClose }) {
         {/* Mobile close */}
         <div className="flex items-center justify-between px-4 mb-3 lg:hidden">
           <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "#9CA3AF" }}>
-            {role === "tutor" ? "Tutor Menu" : "Student Menu"}
+            {role === "tutor" ? "Tutor Menu" : "Learner Menu"}
           </span>
           <button onClick={onClose} className="p-1 rounded hover:bg-gray-100">
             <X size={16} style={{ color: "#6B7280" }} />
@@ -61,7 +67,7 @@ export default function Sidebar({ role = "student", open, onClose }) {
             Logged in as
           </p>
           <p className="text-sm font-bold" style={{ color: "#0056D2" }}>
-            {role === "tutor" ? "Tutor" : "Student"}
+            {role === "tutor" ? "Tutor" : "Learner"}
           </p>
         </div>
 
@@ -70,7 +76,7 @@ export default function Sidebar({ role = "student", open, onClose }) {
           {navItems.map(({ icon: Icon, label, path }) => {
             const active =
               location.pathname === path ||
-              (path !== "/student" && path !== "/tutor" && location.pathname.startsWith(path));
+              (path !== "/learner" && path !== "/tutor" && location.pathname.startsWith(path));
             return (
               <button
                 key={path}
@@ -101,23 +107,6 @@ export default function Sidebar({ role = "student", open, onClose }) {
             );
           })}
         </nav>
-
-        {/* Switch role */}
-        <div
-          className="mx-3 mt-3 p-3 rounded-xl cursor-pointer transition-colors flex items-center gap-3"
-          style={{ border: "1px dashed #CBD5E1", background: "transparent" }}
-          onClick={() => navigate(role === "tutor" ? "/student" : "/tutor")}
-          onMouseEnter={(e) => (e.currentTarget.style.background = "#F5F7FA")}
-          onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-        >
-          <ArrowLeftRight size={15} style={{ color: "#0056D2" }} />
-          <div>
-            <p className="text-xs" style={{ color: "#9CA3AF" }}>Switch to</p>
-            <p className="text-sm font-semibold" style={{ color: "#0056D2" }}>
-              {role === "tutor" ? "Student View" : "Tutor View"}
-            </p>
-          </div>
-        </div>
       </aside>
     </>
   );

@@ -3,11 +3,14 @@ import { useState } from "react";
 import { Bell, Search, User, LogOut, Settings, ChevronDown } from "lucide-react";
 import { notifications, studentProfile } from "../../data/dummyData";
 
-export default function Navbar({ role = "student", onToggleSidebar }) {
+export default function Navbar({ role = "learner", onToggleSidebar }) {
   const navigate = useNavigate();
   const [showNotif, setShowNotif] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const unread = notifications.filter((n) => n.unread).length;
+
+  const sessionUser = JSON.parse(localStorage.getItem('user')) || { username: role === 'tutor' ? 'Priya' : 'Aditya' };
+  const firstName = sessionUser.username.split(" ")[0];
 
   return (
     <header
@@ -112,9 +115,11 @@ export default function Navbar({ role = "student", onToggleSidebar }) {
             onClick={() => { setShowProfile(!showProfile); setShowNotif(false); }}
             className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
           >
-            <img src={studentProfile.avatar} alt="Profile" className="w-8 h-8 rounded-full" />
+            <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm">
+              {firstName.charAt(0)}
+            </div>
             <span className="text-sm font-medium hidden sm:block" style={{ color: "#1F2937" }}>
-              {role === "tutor" ? "Priya" : "Aditya"}
+              {firstName}
             </span>
             <ChevronDown size={14} style={{ color: "#9CA3AF" }} />
           </button>
@@ -129,9 +134,9 @@ export default function Navbar({ role = "student", onToggleSidebar }) {
               }}
             >
               {[
-                { icon: User, label: "Profile", action: () => {} },
-                { icon: Settings, label: "Settings", action: () => {} },
-                { icon: LogOut, label: "Sign Out", action: () => navigate("/") },
+                { icon: User, label: "Profile", action: () => { navigate(role === 'tutor' ? '/tutor/profile' : '/learner/profile'); setShowProfile(false); } },
+                { icon: Settings, label: "Settings", action: () => { setShowProfile(false); } },
+                { icon: LogOut, label: "Sign Out", action: () => { localStorage.clear(); navigate("/"); } },
               ].map(({ icon: Icon, label, action }) => (
                 <button
                   key={label}
