@@ -15,6 +15,9 @@ dist-ssr
 .env.*
 backend/.env
 backend/uploads/
+backend/profile_debug_out.json
+backend/debug/
+*.debug.log
 
 # Editor directories and files
 .vscode/*
